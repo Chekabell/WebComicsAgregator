@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('comics_id');
             $table->foreign('comics_id')->references('id')->on('comics')->onDelete('cascade');
             $table->unsignedBigInteger('tag_id');
-            $table->foreign('tag_id')->references('id')->on('tag')->onDelete('cascade');
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
     }
 
