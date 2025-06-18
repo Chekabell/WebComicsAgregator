@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('comics_id');
             $table->foreign('comics_id')->references('id')->on('comics')->onDelete('cascade');
             $table->text('text');
-            $table->date('date_public');
+            $table->timestamps();
         });
     }
 

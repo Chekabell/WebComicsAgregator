@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Comics\StoreRequest;
+use App\Http\Requests\Comics\UpdateRequest;
 use App\Models\Comics;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 
 class ComicsController extends Controller
 {
@@ -13,8 +16,8 @@ class ComicsController extends Controller
      */
     public function index()
     {
-        return view ('comics',[
-            'comics' => Comics::all()
+        return view ('comics.index',[
+            'comics' => Comics::orderBy('id')->get()
         ]);
     }
 
@@ -23,33 +26,46 @@ class ComicsController extends Controller
      */
     public function create()
     {
-        //
+        return view('comics.create', [
+            'tags' => Tag::all()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $path = "covers-comics/default.jpg";
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('covers-comics', 'public');
+        }
+
+        $comics = Comics::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'year' => $validated['year'],
+            'type_comics' => $validated['type_comics'],
+            'image' => $path,
+            'link' => $validated['link'],
+        ]);
+
+        if(Arr::has($validated, ('tags'))){
+            $comics->tags()->attach($validated['tags']);
+        }
+
+        return redirect()->route('comics.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Comics $comics)
     {
-        return view ('comics',[
-            'comics' => Comics::where("id", $id)->get()
-        ]);
-    }
-
-    public function showWithTags(string $id)
-    {
-        $comics = Comics::where("id", $id)->first();
-        return view ('comicsWithTags',[
-            'comics' => $comics,
-            'tags' => $comics->tags
+        return view ('comics.show',[
+            'comics' => $comics
         ]);
     }
 
@@ -61,28 +77,65 @@ class ComicsController extends Controller
             'comics' => $tag->comics,
         ]);
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Comics $comics)
     {
-        //
+        return view ('comics.edit',[
+            'comics' => $comics,
+            'tags' => Tag::all(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, Comics $comics)
     {
-        //
+        $validated = $request->validated();
+        $path = $comics->image;
+
+        if ($request->hasFile('image')) {
+
+            if($comics->image && Storage::disk('public')->exists($comics->image)){
+                 Storage::disk('public')->delete($comics->image);
+            }
+
+            $path = $request->file('image')->store('covers-comics', 'public');
+        }
+
+        $comics->fill([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'image' => $path,
+            'link' => $validated['link'],
+        ]);
+
+        if($comics->isDirty()){
+            $comics->save();
+        }
+
+        if(Arr::has($validated, 'tags')){
+            $validatedTags = array_unique($validated['tags']);
+            $comics->tags()->syncWithoutDetaching($validatedTags);
+        }
+
+        return redirect()->route('comics.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Comics $comics)
     {
-        //
+        $comics->tags()->detach();
+
+        if ($comics->image && Storage::disk('public')->exists($comics->image)) {
+        Storage::disk('public')->delete($comics->image);
+    }
+        $comics->delete();
+        return redirect()->route('comics.index');
     }
 }

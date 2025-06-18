@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table("users", function (Blueprint $table) {
             $table->boolean('is_stuff')->default(false);
             $table->string('image', 150)->default('http://localhost:8000/no_avatar.jpg');
+            $table->softDeletes();
         });
     }
 

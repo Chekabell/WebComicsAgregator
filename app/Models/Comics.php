@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comics extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class, "comics_tags");
@@ -26,6 +29,7 @@ class Comics extends Model
         return $this->belongsToMany(User::class, "bookmarks");
     }
     protected $table = "comics";
-    public $timestamps = false;
+    protected $guarded = false;
+    public $timestamps = true;
 }
 

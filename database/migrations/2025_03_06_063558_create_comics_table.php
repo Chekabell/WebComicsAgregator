@@ -16,12 +16,14 @@ return new class extends Migration
             $table->string('title', 150);
             $table->text('description')->nullable();
             $table->year('year');
-            $table->float('avg_rating',1)->unsigned()->nullable();
-            $table->integer('quantity_rates')->unsigned()->nullable();
-            $table->bigInteger('summ_rates')->unsigned()->nullable();
+            $table->float('avg_rating',1)->unsigned()->default(0.0);
+            $table->integer('quantity_rates')->unsigned()->default(0);
+            $table->bigInteger('summ_rates')->unsigned()->default(0);
             $table->string('type_comics');
             $table->string('image',200);
             $table->string('link',200);
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view ('users',[
+        return view ('user.index',[
             'users' => User::all()
         ]);
     }
@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -41,15 +41,16 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        return view ('users',[
-            'users' => User::where("id", $id)->get()
+        $user = User::findOrFail($id);
+        return view ('user.show.profile',[
+            'user' => $user
         ]);
     }
 
-    public function showWithComments(string $id)
+    public function showComments(string $id)
     {
-        $user = User::where("id", $id)->first();
-        return view ('userWithComments',[
+        $user = User::findOrFail($id);
+        return view ('user.show.comments',[
             'user' => $user,
             'comments' => $user->comments
         ]);
