@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\Comics\StoreRequest;
 use App\Http\Requests\Comics\UpdateRequest;
 use App\Models\Comics;
@@ -14,10 +15,11 @@ class ComicsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perpage = $request->perpage ?? 2;
         return view ('comics.index',[
-            'comics' => Comics::orderBy('id')->get()
+            'comics' => Comics::orderBy('id')->paginate($perpage)->withQueryString()
         ]);
     }
 

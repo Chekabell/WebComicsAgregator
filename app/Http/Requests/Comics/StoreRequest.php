@@ -28,7 +28,7 @@ class StoreRequest extends FormRequest
             'tags' => 'array',
             'type_comics' => 'required|string|max:100',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'link' => 'nullable|url|max:200',
+            'link' => 'required|url|max:200',
         ];
     }
 
@@ -42,6 +42,7 @@ class StoreRequest extends FormRequest
             'year.max' => 'Год выпуска не может быть далеко в будущем',
             'type_comics.required' => 'Тип комикса обязателен для заполнения',
             'type_comics.max' => 'Название не должно превышать 100 символов',
+            'link.required' => 'Ссылка на комикс обязательна для заполнения',
             'link.url' => 'Укажите корректную ссылку',
             'link.max' => 'Ссылка не должна превышать 200 символов',
             'image.image' => 'Файл должен быть изображением',

@@ -41,6 +41,18 @@
             @endforeach
         </tbody>
     </table>
+    <div style="padding-left: 1%;">
+        {{ $comics->links() }}
+        Элементов на странице:
+        <form method="get" action="{{ route('comics.index') }}">
+            <select name="perpage">
+                <option value="2" @if($comics->perPage() == 2) selected @endif>2</option>
+                <option value="3" @if($comics->perPage() == 3) selected @endif>3</option>
+                <option value="4" @if($comics->perPage() == 4) selected @endif>4</option>
+            </select>
+            <input type="submit" value="Change">
+        </form>
+    </div>
     <a href="{{ route('comics.create') }}" class="btn btn-primary btn-sm">
         Add
     </a>

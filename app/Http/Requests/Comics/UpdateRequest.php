@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
             'description' => 'nullable|string',
             'tags' => 'array',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'link' => 'nullable|url|max:200',
+            'link' => 'required|url|max:200',
         ];
     }
 
@@ -35,6 +35,7 @@ class UpdateRequest extends FormRequest
         return [
             'title.required' => 'Название комикса обязательно для заполнения',
             'title.max' => 'Название не должно превышать 150 символов',
+            'link.required' => 'Ссылка на комикс обязательна для заполнения',
             'link.url' => 'Укажите корректную ссылку',
             'link.max' => 'Название не должно превышать 200 символов',
             'image.image' => 'Файл должен быть изображением',
