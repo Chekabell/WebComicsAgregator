@@ -1,46 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>609-21</title>
-    @vite(['resources/js/app.js', 'resources/scss/app.scss'])
-</head>
-<body>
+@extends('layouts.mainLayout')
+@section('content')
+<div class="container">
     <h2>Список комиксов:</h2>
-    <table>
-        <thead>
-            <th>id</th>
-            <th>Название комикса</th>
-            <th>Описание</th>
-            <th>Редактирование</th>
-            <th>Удаление</th>
-        </thead>
-        <tbody>
-            @foreach ($comics as $com)
-                <tr>
-                    <td>{{ $com->id }}</td>
-                    <td>
-                        <a href="{{ route('comics.show', $com) }}" class="btn btn-link btn-sm">
-                            {{ $com->title }}
-                        </a>
-                    </td>
-                    <td>{{ $com->description }} </td>
-                    <td>
-                        <form action="{{ route('comics.edit', $com) }}" method="">
-                            <button type="submit">Edit</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="{{ route('comics.destroy', $com) }}" method="post">
-                            @csrf
-                            @method('delete')
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-1 border border-black">
+            id
+        </div>
+         <div class="col-2 border border-black">
+            Название комикса
+        </div>
+         <div class="col-4 border border-black">
+            Описание
+        </div>
+         <div class="col-2 border border-black">
+            Редактирование
+        </div>
+         <div class="col-2 border border-black">
+            Удаление
+        </div>
+    </div>
+    @foreach ($comics as $com)
+        <div class="row">
+            <div class="col-1 border border-black">{{ $com->id }}</div>
+            <div class="col-2 border border-black">
+                <a href="{{ route('comics.show', $com) }}" class="btn btn-link btn-sm">
+                    {{ $com->title }}
+                </a>
+            </div>
+            <div class="col-4 border border-black">{{ $com->description }} </div>
+            <div class="col-2 border border-black d-flex justify-content-center align-items-center">
+                <form action="{{ route('comics.edit', $com) }}" method="">
+                    <button type="submit">Edit</button>
+                </form>
+            </div>
+            <div class="col-2 border border-black d-flex justify-content-center align-items-center">
+                <form action="{{ route('comics.destroy', $com) }}" method="post">
+                    @csrf
+                    @method('delete')
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    @endforeach
     <div style="padding-left: 1%;">
         {{ $comics->links() }}
         Элементов на странице:
@@ -56,6 +57,5 @@
     <a href="{{ route('comics.create') }}" class="btn btn-primary btn-sm">
         Add
     </a>
-
-</body>
-</html>
+</div>
+@endsection

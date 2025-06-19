@@ -1,29 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>609-21</title>
-</head>
-<body>
-    <img src="{{ asset('storage/' . $comics->image) }}">
-    <h2>Список тэгов:</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>Название комикса</th>
-                <th>Описание</th>
-                <th>Тэги</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td rowspan="3">{{ $comics->id }}</td>
-                <td rowspan="3">{{ $comics->title }}</td>
-                <td rowspan="3">{{ $comics->description }}</td>
-                <td>{{$comics->tags->implode('title', ' ')}}</td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-</html>
+@extends('layouts.mainLayout')
+@section('content')
+    <div class="container d-flex flex-column">
+        <div class="container d-flex flex-row">
+            <div class="container w-25">
+                <img class="img-fluid" src="{{ asset('storage/' . $comics->image) }}">
+            </div>
+            <div class="container w-75">
+                <div class="row">
+                    <div class="col-2">
+                        Название комикса
+                    </div>
+                    <div class="col-10">
+                        {{ $comics->title }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        Описание
+                    </div>
+                    <div class="col-10">
+                        {{ $comics->description }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        Тэги
+                    </div>
+                    <div class="col-10">
+                        @foreach ($comics->tags as $tag)
+                            <div class="badge bg-primary">
+                                {{ $tag->title }}
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+        @auth
+            @include('comments.create', [
+                'comics_id' => $comics->id,
+                'user_id' => Auth::user()->id
+            ])
+        @endauth
+        @include('comments.show')
+    </div>
+@endsection

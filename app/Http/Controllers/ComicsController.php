@@ -8,6 +8,7 @@ use App\Http\Requests\Comics\UpdateRequest;
 use App\Models\Comics;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Arr;
 
 class ComicsController extends Controller
@@ -67,7 +68,7 @@ class ComicsController extends Controller
     public function show(Comics $comics)
     {
         return view ('comics.show',[
-            'comics' => $comics
+            'comics' => $comics,
         ]);
     }
 
@@ -101,7 +102,9 @@ class ComicsController extends Controller
 
         if ($request->hasFile('image')) {
 
-            if($comics->image && Storage::disk('public')->exists($comics->image)){
+            if($comics->image
+            && Storage::disk('public')->exists($comics->image)
+            && $comics->image != "covers-comics/default.jpg"){
                  Storage::disk('public')->delete($comics->image);
             }
 
@@ -132,11 +135,16 @@ class ComicsController extends Controller
      */
     public function destroy(Comics $comics)
     {
+        if(!Gate::allows('destroy-comics', $comics)){
+            return redirect('/error')->with('message',
+                'У вас нет разрешения на удаление комикса ' . $comics->title);
+        }
+
         $comics->tags()->detach();
 
         if ($comics->image && Storage::disk('public')->exists($comics->image)) {
-        Storage::disk('public')->delete($comics->image);
-    }
+            Storage::disk('public')->delete($comics->image);
+        }
         $comics->delete();
         return redirect()->route('comics.index');
     }
