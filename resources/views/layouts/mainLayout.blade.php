@@ -1,22 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="h-100" lang="en" data-bs-theme="dark">
     <head>
         <meta charset="UTF-8">
         <title>609-21</title>
         @vite(['resources/js/app.js', 'resources/scss/app.scss'])
     </head>
-    <body>
-        @if (Auth::user())
-            @include('user.auth.login', ['user'=> Auth::user()])
-        @else
-            <a href="{{ route('login') }}" class="btn btn-link btn-sm">
-                Войти в систему
-             </a>
-        @endif
-
-
-        @section('content')
-
-        @show
+    <body class="h-100">
+        @include('components.header')
+        <div class="pt-4 h-100">
+            @section('content')
+            @show
+        </div>
     </body>
 </html>

@@ -8,6 +8,7 @@ use App\Http\Requests\Comics\UpdateRequest;
 use App\Models\Comics;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Arr;
 
@@ -20,7 +21,8 @@ class ComicsController extends Controller
     {
         $perpage = $request->perpage ?? 2;
         return view ('comics.index',[
-            'comics' => Comics::orderBy('id')->paginate($perpage)->withQueryString()
+            'comics' => Comics::orderBy('id')->paginate($perpage)->withQueryString(),
+            'message' => $request->message
         ]);
     }
 
@@ -42,9 +44,6 @@ class ComicsController extends Controller
         $validated = $request->validated();
 
         $path = "covers-comics/default.jpg";
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('covers-comics', 'public');
-        }
 
         $comics = Comics::create([
             'title' => $validated['title'],
@@ -69,15 +68,6 @@ class ComicsController extends Controller
     {
         return view ('comics.show',[
             'comics' => $comics,
-        ]);
-    }
-
-    public function showComicsByTags(string $id)
-    {
-        $tag = Tag::where("id", $id)->first();
-        return view ('comicsByTags',[
-            'tag' => $tag,
-            'comics' => $tag->comics,
         ]);
     }
 
@@ -142,10 +132,13 @@ class ComicsController extends Controller
 
         $comics->tags()->detach();
 
-        if ($comics->image && Storage::disk('public')->exists($comics->image)) {
+        if ($comics->image
+        && Storage::disk('public')->exists($comics->image)
+        && $comics->image != "covers-comics/default.jpg") {
             Storage::disk('public')->delete($comics->image);
         }
+
         $comics->delete();
-        return redirect()->route('comics.index');
+        return redirect()->route('comics.index')->with('message', 'Комикс "' . $comics->title . '" успешно удалён');
     }
 }

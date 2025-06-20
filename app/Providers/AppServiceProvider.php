@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Paginator::defaultView('pagination::default');
+        Paginator::useBootstrap();
 
         Gate::define('destroy-comics', function (User $user, Comics $comics){
             return $user->is_stuff || $comics->image == "covers-comics/default.jpg";

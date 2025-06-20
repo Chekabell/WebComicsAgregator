@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Intervention\Image\Facades\Image;
 
 Route::get('/', [ComicsController::class, 'index'])->name('weclome');
 
@@ -19,7 +20,6 @@ Route::delete('/comics/{comics}', [ComicsController::class, 'destroy'])->name('c
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-Route::get('/tags/{id}', [ComicsController::class, 'showComicsByTags']);
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 Route::get('/users/{id}/comments', [UserController::class, 'showComments']);
