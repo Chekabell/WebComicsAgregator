@@ -5,9 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ComicsControllerAPI;
-use App\Http\Controllers\CommentControllerAPI;
-use App\Http\Controllers\UserControllerAPI;
+
 
 Route::get('/', [ComicsController::class, 'index'])->name('weclome');
 
@@ -35,11 +33,3 @@ Route::get('/error', function(){
     ]);
 });
 
-Route::get('/api/comics', [ComicsControllerAPI::class, 'index']);
-Route::get('/api/comics/{comics}', [ComicsControllerAPI::class, 'show']);
-
-Route::get('/api/comments', [CommentControllerAPI::class, 'index']);
-Route::get('/api/comments/{comment}', [CommentControllerAPI::class, 'show']);
-
-Route::get('/api/users', [UserControllerAPI::class, 'index']);
-Route::get('/api/users/{user}', [UserControllerAPI::class, 'show']);

@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Comment;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class CommentControllerAPI extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response(Comment::all());
+        return response(User::all());
     }
 
     /**
@@ -26,9 +27,9 @@ class CommentControllerAPI extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Comment $comment)
+    public function show(User $user)
     {
-        return response($comment);
+         return response($user);
     }
 
     /**

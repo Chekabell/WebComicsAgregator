@@ -1,14 +1,21 @@
 <?php
-use App\Http\Controllers\ComicsControllerAPI;
-use App\Http\Controllers\CommentControllerAPI;
-use App\Http\Controllers\UserControllerAPI;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\ComicsController;
+use App\Http\Controllers\API\CommentController;
+use App\Http\Controllers\API\UserController;
 
-Route::get('/api/comics', [ComicsControllerAPI::class, 'index']);
-Route::get('/api/comics/{comics}', [ComicsControllerAPI::class, 'show']);
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
-Route::get('/api/comments', [CommentControllerAPI::class, 'index']);
-Route::get('/api/comments/{comment}', [CommentControllerAPI::class, 'show']);
 
-Route::get('/api/users', [UserControllerAPI::class, 'index']);
-Route::get('/api/users/{user}', [UserControllerAPI::class, 'show']);
+Route::get('/comics', [ComicsController::class, 'index']);
+Route::get('/comics/{comics}', [ComicsController::class, 'show']);
+
+Route::get('/comments', [CommentController::class, 'index']);
+Route::get('/comments/{comment}', [CommentController::class, 'show']);
+
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/users/{user}', [UserController::class, 'show']);

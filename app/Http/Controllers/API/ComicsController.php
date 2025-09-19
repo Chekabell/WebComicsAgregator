@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comics;
 
-class ComicsControllerAPI extends Controller
+class ComicsController extends Controller
 {
     /**
      * Display a listing of the resource.
